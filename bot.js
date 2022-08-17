@@ -111,7 +111,8 @@ const proximaMusica = (link, listamusicas) => new Promise(async (sucess, reject)
         console.log(link['author']);
         await ytdl.getInfo(link['link'].trim())
             .then((info) => {
-                client.user.setActivity(info.videoDetails.title + '\nBy: ' + link['author'], { type: "LISTENING" });
+                var tempo = info.videoDetails.lengthSeconds;
+                client.user.setActivity(info.videoDetails.title + '\n | By: ' + link['author'] + '\n | Tempo: ' + convertSecToHours(tempo), { type: "LISTENING" });
             })
             .catch((error) => {
                 console.log(error);
@@ -151,3 +152,12 @@ const retornaMusicaYoutube = (busca) => new Promise((success) => {
         })
         .catch(console.error);
 });
+
+function convertSecToHours(num) {
+    var hours = Math.floor(num / 60);
+    var minutes = num % 60;
+    if (minutes + ''.length < 2) {
+        minutes = '0' + minutes;
+    }
+    return hours + ":" + minutes;
+}
